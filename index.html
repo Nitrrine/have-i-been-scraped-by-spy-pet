@@ -54,8 +54,6 @@
         >.
       </p>
       <p>Not works? Wait around a 20-30 seconds after a first try.</p>
-      <strong>Disabled, API not works correctly</strong>
-      <br />
       <input
         type="text"
         placeholder="Enter Discord Server ID"
@@ -65,13 +63,10 @@
         <p>Everything is OK, no bot found!</p>
       </div>
       <div class="result result-bad hide" id="bad-result">
-        <p>
-          Everything is NOT ok, bot has been found. Contact server administrator
-          to ban bot with ID: <code id="bot-id"></code>
-        </p>
+        <p>Everything is NOT ok, bot has been found!</p>
       </div>
     </div>
-    <!-- <script>
+    <script>
       document
         .getElementById("check-btn")
         .addEventListener("click", function (event) {
@@ -82,8 +77,6 @@
             .then((response) => response.json())
             .then((data) => {
               if (data.onAccount) {
-                document.getElementById("bot-id").innerHTML = data.onAccount
-
                 document.getElementById("good-result").classList.add("hide")
                 document.getElementById("bad-result").classList.remove("hide")
               } else {
@@ -93,6 +86,6 @@
             })
             .catch((error) => console.error("Error:", error))
         })
-    </script> -->
+    </script>
   </body>
 </html>
