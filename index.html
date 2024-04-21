@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Have I Been Scraped by Spy.pet?</title>
+    <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css" />
+    <style>
+      .result {
+        background: #0f0f0f;
+        padding: 1em;
+        border-radius: 1em;
+      }
+
+      .result-good {
+        background: #1b5a16;
+      }
+
+      .result-bad {
+        background: #5a1616;
+      }
+
+      .hide {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Have I Been Scraped by Spy.pet?</h1>
+    </header>
+    <div class="form">
+      <p>Checks if server contains Spy.pet's Scraper Bot</p>
+      <input
+        type="text"
+        placeholder="Enter Discord Server ID"
+        id="discord-server" />
+      <button id="check-btn">Check</button>
+      <div class="result result-good hide" id="good-result">
+        <p>Everything is OK, no bot found!</p>
+      </div>
+      <div class="result result-bad hide" id="bad-result">
+        <p>
+          Everything is NOT ok, bot has been found. Contact server administrator
+          to ban bot with ID: <code class="bot-id"></code>
+        </p>
+      </div>
+    </div>
+    <script>
+      document
+        .getElementById("check-btn")
+        .addEventListener("click", function (event) {
+          const serverId = document.getElementById("discord-server").value
+          fetch(`https://api.spy.pet/servers/${serverId}`, {
+            method: "GET",
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.onAccount) {
+                document.getElementById("bot.id").innerHTML = data.onAccount
+
+                document.getElementById("good-result").classList.add("hide")
+                document.getElementById("bad-result").classList.remove("hide")
+              } else {
+                document.getElementById("good-result").classList.remove("hide")
+                document.getElementById("bad-result").classList.add("hide")
+              }
+            })
+            .catch((error) => console.error("Error:", error))
+        })
+    </script>
+  </body>
+</html>
