@@ -54,29 +54,45 @@
         >.
       </p>
       <p>Not works? Wait around a 20-30 seconds after a first try.</p>
-      <input
-        type="text"
-        placeholder="Enter Discord Server ID"
-        id="discord-server" />
+      <input type="text" placeholder="Enter Discord Server ID" id="serverId" />
       <button id="check-btn">Check</button>
       <div class="result result-good hide" id="good-result">
-        <p>Everything is OK, no bot found!</p>
+        <p>Everything is OK, Spy.pet is not tracking this server!</p>
+        <i>This service is powered by kickthespy.pet, big thanks to them :3</i>
       </div>
       <div class="result result-bad hide" id="bad-result">
-        <p>Everything is NOT ok, bot has been found!</p>
+        <p>
+          Everything is NOT ok, Spy.pet is tracking this server, using bot under
+          name <strong id="botName"></strong>.
+        </p>
+        <details>
+          <summary>More info</summary>
+          <img src="" alt="bot's pfp" id="botAvatar" />
+          <p>Bot's Username: <code id="botUsername"></code></p>
+          <p>Bot's ID: <code id="botId"></code></p>
+        </details>
+        <i>This service is powered by kickthespy.pet, big thanks to them :3</i>
       </div>
     </div>
     <script>
+      const API_URL = "https://kickthespy.pet"
+
       document
         .getElementById("check-btn")
         .addEventListener("click", function (event) {
-          const serverId = document.getElementById("discord-server").value
-          fetch(`https://spy-pet-proxy.onrender.com/servers/${serverId}`, {
-            method: "GET",
-          })
+          const serverId = document.getElementById("serverId").value
+
+          fetch(`${API_URL}/getBot?id=${serverId}`)
             .then((response) => response.json())
             .then((data) => {
-              if (data.onAccount) {
+              if (data.id) {
+                document.getElementById("botName").innerText = data.global_name
+                document.getElementById("botUsername").innerText = data.username
+                document.getElementById("botId").innerText = data.id
+                document
+                  .getElementById("botAvatar")
+                  .setAttribute("src", data.avatarURL)
+
                 document.getElementById("good-result").classList.add("hide")
                 document.getElementById("bad-result").classList.remove("hide")
               } else {
