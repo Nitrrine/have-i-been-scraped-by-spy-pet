@@ -33,7 +33,15 @@
       <h1>Have I Been Scraped by Spy.pet?</h1>
     </header>
     <div class="form">
-      <p>Checks if server contains Spy.pet's Scraper Bot</p>
+      <p>
+        Checks if server contains a data scraper bot,
+        <a
+          href="https://www.youtube.com/watch?v=ktxbXlF6UQE"
+          target="_blank"
+          rel="noopener noreferer"
+          >more info</a
+        >.
+      </p>
       <input
         type="text"
         placeholder="Enter Discord Server ID"
@@ -45,7 +53,7 @@
       <div class="result result-bad hide" id="bad-result">
         <p>
           Everything is NOT ok, bot has been found. Contact server administrator
-          to ban bot with ID: <code class="bot-id"></code>
+          to ban bot with ID: <code id="bot-id"></code>
         </p>
       </div>
     </div>
@@ -54,13 +62,13 @@
         .getElementById("check-btn")
         .addEventListener("click", function (event) {
           const serverId = document.getElementById("discord-server").value
-          fetch(`https://api.spy.pet/servers/${serverId}`, {
+          fetch(`https://spy-pet-proxy.onrender.com/servers/${serverId}`, {
             method: "GET",
           })
             .then((response) => response.json())
             .then((data) => {
               if (data.onAccount) {
-                document.getElementById("bot.id").innerHTML = data.onAccount
+                document.getElementById("bot-id").innerHTML = data.onAccount
 
                 document.getElementById("good-result").classList.add("hide")
                 document.getElementById("bad-result").classList.remove("hide")
