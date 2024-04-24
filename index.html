@@ -86,10 +86,10 @@
         <select id="provider">
           <option value="default" selected>kickthespy.pet (default)</option>
         </select>
-        <label for="serverId">Server ID:</label>
+        <label for="serverId">Server ID or invite link:</label>
         <input
           type="text"
-          placeholder="Enter Discord Server ID"
+          placeholder="Enter Discord Server ID or invite link"
           id="serverId" />
         <button id="check-btn">Check</button>
         <div class="result result-good hide" id="good-result">
@@ -189,14 +189,36 @@
           const serverId = document.getElementById("serverId").value
           const provider = document.getElementById("provider").value
 
-          // This is minimum Discord server ID length
-          if (serverId.length < 18) {
-            return
-          }
+          if (parseInt(serverId)) {
+            // This is minimum Discord server ID length
+            if (serverId.length < 18) {
+              return
+            }
 
-          // Checks what provider is being used, currently we have only one but maybe new in future?
-          if (provider == "default") {
-            fetch(`${API_URL}/getBot?id=${serverId}`)
+            // Checks what provider is being used, currently we have only one but maybe new in future?
+            if (provider == "default") {
+              fetch(`${API_URL}/getBot?id=${serverId}`)
+                .then((response) => response.json())
+                .then((data) => {
+                  // If response contains bot ID == server is being tracked
+                  if (data.id) {
+                    showBadResult(
+                      data.global_name,
+                      data.username,
+                      data.id,
+                      data.avatarURL
+                    )
+                  } else {
+                    showGoodResult()
+                  }
+                })
+                .catch((error) => showError(error))
+            }
+          } else {
+            const splitInviteLink = serverId.split("/")
+            const inviteLink = splitInviteLink[splitInviteLink.length - 1]
+
+            fetch(`${API_URL}/byInv?code=/${inviteLink}`)
               .then((response) => response.json())
               .then((data) => {
                 // If response contains bot ID == server is being tracked
