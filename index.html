@@ -18,10 +18,26 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css" />
     <style>
+      .form {
+        display: flex;
+        flex-direction: column;
+      }
+
       .result {
         background: #0f0f0f;
         padding: 1em;
         border-radius: 1em;
+        margin-top: 0.5em;
+        animation: 200ms fade-in;
+      }
+
+      @keyframes fade-in {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
       }
 
       .result-good {
@@ -60,63 +76,143 @@
           >more info</a
         >.
       </p>
-      <input type="text" placeholder="Enter Discord Server ID" id="serverId" />
-      <button id="check-btn">Check</button>
-      <div class="result result-good hide" id="good-result">
-        <p>Everything is OK, Spy.pet is not tracking this server!</p>
-        <i>This service is powered by kickthespy.pet, big thanks to them :3</i>
-      </div>
-      <div class="result result-bad hide" id="bad-result">
-        <p>
-          Everything is NOT ok, Spy.pet is tracking this server, using bot under
-          name <strong id="botName"></strong>.
-        </p>
-        <details>
-          <summary>More info</summary>
-          <div style="display: flex; gap: 0.5em">
-            <img
-              src=""
-              alt="bot's pfp"
-              title="Bot's Avatar"
-              id="botAvatar"
-              width="64"
-              height="64" />
-            <div>
-              <p>Bot's Username: <code id="botUsername"></code></p>
-              <p>Bot's ID: <code id="botId"></code></p>
+      <div class="form">
+        <label for="provider"
+          >Provider:
+          <span title="Specifies what should we use for getting data"
+            >(?)</span
+          ></label
+        >
+        <select id="provider">
+          <option value="default" selected>kickthespy.pet (default)</option>
+        </select>
+        <label for="serverId">Server ID:</label>
+        <input
+          type="text"
+          placeholder="Enter Discord Server ID"
+          id="serverId" />
+        <button id="check-btn">Check</button>
+        <div class="result result-good hide" id="good-result">
+          <p>Everything is OK, Spy.pet is not tracking this server!</p>
+          <i
+            >This service is powered by kickthespy.pet, big thanks to them :3</i
+          >
+        </div>
+        <div class="result result-bad hide" id="bad-result">
+          <p>
+            Everything is NOT ok, Spy.pet is tracking this server, using bot
+            under name <strong id="botName"></strong>.
+          </p>
+          <details open>
+            <summary>More info</summary>
+            <div style="display: flex; gap: 0.5em">
+              <img
+                src=""
+                alt="bot's pfp"
+                title="Bot's Avatar"
+                id="botAvatar"
+                width="64"
+                height="64" />
+              <div>
+                <p>Bot's Username: <code id="botUsername"></code></p>
+                <p>Bot's ID: <code id="botId"></code></p>
+              </div>
             </div>
-          </div>
-        </details>
-        <i>This service is powered by kickthespy.pet, big thanks to them :3</i>
+          </details>
+          <i
+            >This service is powered by kickthespy.pet, big thanks to them :3</i
+          >
+        </div>
+        <div class="result result-bad hide" id="error-result">
+          <p>An error occurred!</p>
+          <pre id="error"></pre>
+          <i
+            >Please create an issue
+            <a href="#" id="createIssueLink" target="_blank">here</a> if problem
+            persists.</i
+          >
+        </div>
       </div>
     </main>
     <script>
+      // Configurable vars
       const API_URL = "https://kickthespy.pet"
 
+      const REPO_USER = "Nitrrine"
+      const REPO_NAME = "have-i-been-scraped-by-spy-pet"
+
+      // Misc
+      const goodResult = document.getElementById("good-result")
+      const badResult = document.getElementById("bad-result")
+      const errorResult = document.getElementById("error-result")
+
+      // Functions
+      function showBadResult(botName, botUsername, botId, botAvatar) {
+        document.getElementById("botName").innerText = botName
+        document.getElementById("botUsername").innerText = botUsername
+        document.getElementById("botId").innerText = botId
+        document.getElementById("botAvatar").setAttribute("src", botAvatar)
+
+        goodResult.classList.add("hide")
+        badResult.classList.remove("hide")
+        errorResult.classList.add("hide")
+      }
+
+      function showGoodResult() {
+        goodResult.classList.remove("hide")
+        badResult.classList.add("hide")
+        errorResult.classList.add("hide")
+      }
+
+      function showError(error) {
+        document.getElementById("error").innerText = error
+
+        goodResult.classList.add("hide")
+        badResult.classList.add("hide")
+        errorResult.classList.remove("hide")
+      }
+
+      // Do something on page load
+      document.addEventListener("DOMContentLoaded", () => {
+        document
+          .getElementById("createIssueLink")
+          .setAttribute(
+            "href",
+            `https://github.com/${REPO_USER}/${REPO_NAME}/issues`
+          )
+      })
+
+      // When we click button, main process begins here
       document
         .getElementById("check-btn")
         .addEventListener("click", function (event) {
           const serverId = document.getElementById("serverId").value
+          const provider = document.getElementById("provider").value
 
-          fetch(`${API_URL}/getBot?id=${serverId}`)
-            .then((response) => response.json())
-            .then((data) => {
-              if (data.id) {
-                document.getElementById("botName").innerText = data.global_name
-                document.getElementById("botUsername").innerText = data.username
-                document.getElementById("botId").innerText = data.id
-                document
-                  .getElementById("botAvatar")
-                  .setAttribute("src", data.avatarURL)
+          // This is minimum Discord server ID length
+          if (serverId.length < 18) {
+            return
+          }
 
-                document.getElementById("good-result").classList.add("hide")
-                document.getElementById("bad-result").classList.remove("hide")
-              } else {
-                document.getElementById("good-result").classList.remove("hide")
-                document.getElementById("bad-result").classList.add("hide")
-              }
-            })
-            .catch((error) => console.error("Error:", error))
+          // Checks what provider is being used, currently we have only one but maybe new in future?
+          if (provider == "default") {
+            fetch(`${API_URL}/getBot?id=${serverId}`)
+              .then((response) => response.json())
+              .then((data) => {
+                // If response contains bot ID == server is being tracked
+                if (data.id) {
+                  showBadResult(
+                    data.global_name,
+                    data.username,
+                    data.id,
+                    data.avatarURL
+                  )
+                } else {
+                  showGoodResult()
+                }
+              })
+              .catch((error) => showError(error))
+          }
         })
     </script>
   </body>
