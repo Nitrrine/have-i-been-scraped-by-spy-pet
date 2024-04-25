@@ -18,6 +18,11 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css" />
     <style>
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+
       .form {
         display: flex;
         flex-direction: column;
@@ -31,15 +36,6 @@
         animation: 200ms fade-in;
       }
 
-      @keyframes fade-in {
-        0% {
-          opacity: 0;
-        }
-        100% {
-          opacity: 1;
-        }
-      }
-
       .result-good {
         background: #1b5a16;
       }
@@ -50,6 +46,15 @@
 
       .hide {
         display: none;
+      }
+
+      @keyframes fade-in {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
       }
     </style>
   </head>
@@ -189,9 +194,15 @@
           const serverId = document.getElementById("serverId").value
           const provider = document.getElementById("provider").value
 
+          // Fix sending empty serverID
+          if (!serverId.length) return
+
           if (parseInt(serverId)) {
             // This is minimum Discord server ID length
             if (serverId.length < 18) {
+              showError(
+                "Please check Discord Server ID field, use FAQ if you don't know how to get Server ID"
+              )
               return
             }
 
