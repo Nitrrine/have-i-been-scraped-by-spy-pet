@@ -121,6 +121,9 @@
               <div>
                 <p>Bot's Username: <code id="botUsername"></code></p>
                 <p>Bot's ID: <code id="botId"></code></p>
+                <button id="copy-ban-command">Copy Ban Command</button>
+                <button id="copy-username">Copy Username</button>
+                <button id="copy-id">Copy ID</button>
               </div>
             </div>
           </details>
@@ -137,6 +140,9 @@
             persists.</i
           >
         </div>
+        <div class="result result-info hide" id="info-result">
+          <pre id="info"></pre>
+        </div>
       </div>
     </main>
     <script>
@@ -150,6 +156,9 @@
       const goodResult = document.getElementById("good-result")
       const badResult = document.getElementById("bad-result")
       const errorResult = document.getElementById("error-result")
+      const infoResult = document.getElementById("info-result")
+
+      let globalData = []
 
       // Functions
       function showBadResult(botName, botUsername, botId, botAvatar) {
@@ -167,6 +176,7 @@
         goodResult.classList.remove("hide")
         badResult.classList.add("hide")
         errorResult.classList.add("hide")
+        infoResult.classList.add("hide")
       }
 
       function showError(error) {
@@ -175,6 +185,21 @@
         goodResult.classList.add("hide")
         badResult.classList.add("hide")
         errorResult.classList.remove("hide")
+        infoResult.classList.add("hide")
+      }
+
+      function showInfo(error) {
+        document.getElementById("info").innerText = error
+
+        goodResult.classList.add("hide")
+        badResult.classList.add("hide")
+        errorResult.classList.add("hide")
+        infoResult.classList.remove("hide")
+      }
+
+      function copyText(text) {
+        navigator.clipboard.writeText(text)
+        alert(`Copied "${text}"!`)
       }
 
       // Do something on page load
@@ -219,6 +244,8 @@
                       data.id,
                       data.avatarURL
                     )
+
+                    globalData = data
                   } else {
                     showGoodResult()
                   }
@@ -240,6 +267,8 @@
                     data.id,
                     data.avatarURL
                   )
+
+                  globalData = data
                 } else {
                   showGoodResult()
                 }
@@ -247,6 +276,22 @@
               .catch((error) => showError(error))
           }
         })
+
+      document
+        .getElementById("copy-ban-command")
+        .addEventListener("click", () => {
+          copyText(
+            `/ban user:@${globalData.username} delete_messages:Don't Delete Any reason:spy.pet bot account`
+          )
+        })
+
+      document.getElementById("copy-username").addEventListener("click", () => {
+        copyText(globalData.username)
+      })
+
+      document.getElementById("copy-id").addEventListener("click", () => {
+        copyText(globalData.id)
+      })
     </script>
   </body>
 </html>
