@@ -125,7 +125,9 @@ document
                       )
 
                       globalData = server
+                      return
                     }
+                    showGoodResult()
                   }
                 }
               }
