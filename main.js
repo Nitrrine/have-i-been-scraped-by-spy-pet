@@ -14,7 +14,7 @@ let globalData = []
 
 // Provider's API
 const ThatSINEWAVE_LIST_URL =
-  "https://raw.githubusercontent.com/ThatSINEWAVE/Spy.pet-Info/main/data/servers_and_ids.json"
+  "https://raw.githubusercontent.com/ThatSINEWAVE/Spy.pet-Info/main/data/detailed_servers_and_ids.json"
 
 // Functions
 function showBadResult(botName, botUsername, botId, botAvatar) {
@@ -110,12 +110,24 @@ document
           .then((response) => {
             // If response contains guild ID == server is being tracked
             response.text().then(function (content) {
-              if (content.includes(serverId)) {
-                showInfo(
-                  `Oh no! This server is being tracked by spy.pet.\n\nData is provided by "Spy.pet Info" made by ThatSINEWAVE.`
-                )
-              } else {
-                showGoodResult()
+              const json = JSON.parse(content)
+
+              for (const botId in json) {
+                if (json.hasOwnProperty(botId)) {
+                  const servers = json[botId]
+                  for (const server of servers) {
+                    if (server.serverid === serverId) {
+                      showBadResult(
+                        server.global_name,
+                        server.username,
+                        server.id,
+                        server.avatar
+                      )
+
+                      globalData = server
+                    }
+                  }
+                }
               }
             })
           })
