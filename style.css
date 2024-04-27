@@ -1,0 +1,46 @@
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.note {
+  padding: 1em;
+  background: #164a5a;
+  border-radius: 1em;
+  margin-bottom: 1em;
+  animation: 500ms fade-in;
+}
+
+.result {
+  background: #0f0f0f;
+  padding: 1em;
+  border-radius: 1em;
+  margin-top: 0.5em;
+  animation: 200ms fade-in;
+}
+
+.result-good {
+  background: #1b5a16;
+}
+
+.result-bad {
+  background: #5a1616;
+}
+
+.hide {
+  display: none;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

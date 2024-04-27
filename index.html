@@ -13,50 +13,11 @@
     <meta name="author" content="Nitrrine" />
     <meta name="theme-color" content="#0070F3" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css" />
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css" />
-    <style>
-      pre {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-      }
-
-      .form {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .result {
-        background: #0f0f0f;
-        padding: 1em;
-        border-radius: 1em;
-        margin-top: 0.5em;
-        animation: 200ms fade-in;
-      }
-
-      .result-good {
-        background: #1b5a16;
-      }
-
-      .result-bad {
-        background: #5a1616;
-      }
-
-      .hide {
-        display: none;
-      }
-
-      @keyframes fade-in {
-        0% {
-          opacity: 0;
-        }
-        100% {
-          opacity: 1;
-        }
-      }
-    </style>
   </head>
   <body>
     <header>
@@ -72,6 +33,10 @@
       </nav>
     </header>
     <main>
+      <div class="note" id="spypetDownNote">
+        spy.pet is down for ${hours} hours, ${minutes} minutes, ${seconds}
+        seconds.
+      </div>
       <p>
         Checks if server contains a data scraper bot,
         <a
