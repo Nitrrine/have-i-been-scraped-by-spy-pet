@@ -173,11 +173,9 @@ function updateCountdown() {
   const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60))
   const seconds = Math.floor((difference % (1000 * 60)) / 1000)
 
-  console.log(
-    (document.getElementById(
-      "spypetDownNote"
-    ).innerHTML = `spy.pet is down for <b>${hours} hours</b>, <b>${minutes} minutes</b>, <b>${seconds} seconds</b>.`)
-  )
+  document.getElementById(
+    "spypetDownNote"
+  ).innerHTML = `spy.pet is down for <b>${hours} hours</b>, <b>${minutes} minutes</b>, <b>${seconds} seconds</b>.`
 }
 
 const interval = setInterval(updateCountdown, 1000)
