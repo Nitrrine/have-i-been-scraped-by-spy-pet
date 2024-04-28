@@ -160,28 +160,6 @@ document
     }
   })
 
-// Show time since spy.pet got shut down
-
-const shutdownDate = new Date("2024-04-26T13:33:00")
-
-let difference = new Date().getTime() - shutdownDate.getTime()
-
-function updateCountdown() {
-  difference = new Date().getTime() - shutdownDate.getTime()
-
-  const hours = Math.floor(difference / (1000 * 60 * 60))
-  const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60))
-  const seconds = Math.floor((difference % (1000 * 60)) / 1000)
-
-  document.getElementById(
-    "spypetDownNote"
-  ).innerHTML = `spy.pet is down for <b>${hours} hours</b>, <b>${minutes} minutes</b>, <b>${seconds} seconds</b>.`
-}
-
-const interval = setInterval(updateCountdown, 1000)
-
-updateCountdown()
-
 // Functions for action buttons
 
 document.getElementById("copy-ban-command").addEventListener("click", () => {
