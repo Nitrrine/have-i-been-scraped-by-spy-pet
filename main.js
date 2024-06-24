@@ -1,5 +1,5 @@
 // Configurable vars
-const API_URL = "https://kickthespy.pet"
+const API_URL = "https://api.allorigins.win/get?url=https://kickthespy.pet"
 
 const REPO_USER = "Nitrrine"
 const REPO_NAME = "have-i-been-scraped-by-spy-pet"
